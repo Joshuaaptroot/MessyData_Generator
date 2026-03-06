@@ -1,3 +1,5 @@
+using MessyData_Generator.Models;
+using MessyData_Generator.Generator;
 
 namespace MessyData_Generator
 {

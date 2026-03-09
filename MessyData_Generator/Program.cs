@@ -26,13 +26,34 @@ namespace MessyData_Generator
             }
 
             app.UseHttpsRedirection();
+           
+            app.MapGet("/", () => "Messy Data Generator is running.");
 
-            app.UseAuthorization();
+            app.MapGet("/events", (int? count) =>
+            {
+                var eventFactory = new EventFactory();
+                var messyJsonEmitter = new MessyJsonEmitter();
 
+                var messyEvents = new List<Dictionary<string, object?>>();
+                int numberOfEvents = count ?? 10;
+
+                for (int i = 0; i < numberOfEvents; i++)
+                {
+                    var cleanEvent = eventFactory.CreateEvent();
+                    var messyEvent = messyJsonEmitter.Emit(cleanEvent);
+                    messyEvents.Add(messyEvent);
+                }
+
+                return Results.Ok(messyEvents);
+            });
 
             app.MapControllers();
 
             app.Run();
+
+
+
+
         }
     }
 }
